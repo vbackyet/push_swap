@@ -1,32 +1,8 @@
 #include <stdlib.h>
-# include <unistd.h>
+#include <unistd.h>
 #include <stdio.h>
 
-// int     main(int aa, char **args)
-// {
-//     t_stack         *stack_a;
-//     t_stack         *stack_b;
-//     t_binary_tree   *root;
-//     int             status;
 
-//     root = NULL;
-//     stack_b = NULL;
-//     stack_a = create_stack_a(args, &root, aa);
-//     if ((errno & EINVAL) == 0 && aa > 1)
-//     {
-//         stack_b = init_stack();
-//         status = cmp_stack_to_sorted_tree(stack_a, root);
-//         init_rank(root);
-//         fill_rank(stack_a, root);
-//         if (status == STACK_NOT_SORTED)
-//             sorting_process(stack_a, stack_b);
-//         flush_buffer_str();
-//     }
-//     else
-//         write(1, RED"Error\n"COLOR_RESET, 15);
-//     free_structures(stack_a, stack_b, root);
-//     return (0);
-// }
 
 int check_the_argument(int argc, char **argv)
 {
@@ -39,9 +15,9 @@ int check_the_argument(int argc, char **argv)
 typedef struct		s_stack
 {
 	int				num; //значение
-	// int				diff; 
+	int				pos; 
 	struct s_stack	*next; // след значение
-    struct s_stack	*prev; //предыд значение
+  struct s_stack	*prev; //предыд значение
 }					t_stack;
 
 
@@ -49,39 +25,57 @@ typedef struct		s_stack
 
 // https://github.com/sshiling/42-push_swap
 
-t_stack *addelem(t_stack *stack, char *number)
+t_stack *addelem(t_stack *stack, int number, int pos)
 {
   t_stack *temp, *p;
   temp = (t_stack*)malloc(sizeof(t_stack));
   p = stack->next; // сохранение указателя на следующий узел
   stack->next = temp; // предыдущий узел указывает на создаваемый
   temp->num = number; // сохранение поля данных добавляемого узла
+  temp->pos = pos;
   temp->next = p; // созданный узел указывает на следующий узел
   temp->prev = stack; // созданный узел указывает на предыдущий узел
   if (p != NULL)
     p->prev = temp;
-  return(temp);
+}
+
+
+t_stack init_stack(int first_argumnent, int position)
+{
+  t_stack         *stack;
+
 }
 
 
 t_stack *insert_into_stack(int argc, char **argv)
 {
-    //создание узла 
     t_stack         *stack;
+    t_stack         *first_el_of_stack;
     int i;
+    int pos_index;
 
+    pos_index = 0;
+    // printf("%d <- сколько аргументов\n",argc);
     stack = (t_stack *)malloc(sizeof(t_stack));
-    stack->num = 0;
+    stack->num = atoi(argv[1]);
+    stack->pos = pos_index;
     stack->next = NULL; // указатель на следующий узел
     stack->prev = NULL; // указатель на предыдущий узел
-    i = 0;
-    while (argc < i)
+    // printf("%d <- сколько аргументов\n",argc);
+    i = 2;
+    // printf('%d quant\n',argc);
+    first_el_of_stack = stack;
+    while (argc > i)
     {
-        addelem(stack, argv[i]);
+      // printf("%d <- сколько аргументов\n",argc);
+        pos_index++;
+        addelem(stack, atoi(argv[i]), pos_index);
+        i++;
+        stack = stack->next;
     }
 
     //присоединение других узлов к превоначальному
-    return(stack);
+    return(first_el_of_stack);
 }
 
 
@@ -89,10 +83,10 @@ void listprint(t_stack *lst)
 {
   t_stack *p;
   p = lst;
-  do {
-    printf("%d ", p->num); // вывод значения элемента p
+  while (p != NULL) {
+    printf("{%d | %d}", p->num, p-> pos); // вывод значения элемента p
     p = p->next; // переход к следующему узлу
-  } while (p != NULL); // условие окончания обхода
+  }  // условие окончания обхода
 }
 
 
@@ -101,26 +95,20 @@ int main(int argc, char **argv)
     t_stack         *stack_a;
     t_stack         *stack_b;
 
-
+    char *a[4];
+    a[0] = "1";
+    a[1] = "2";
+    a[2] = "3";
+    a[3] = "4";
     if (check_the_argument(argc, argv))
         write(1, "Error\n", 6);
-    printf("%d\n",argc);
-    int i = 0;
-
-    while (argc - i > 0) 
-    {
-      printf("%s\n",argv[i]);
-      i++;
-    }
-
-    // stack_a = insert_into_stack(argc, argv);
+    stack_a = insert_into_stack(argc, argv);
+    stack_b = insert_into_stack(4, a);
+    listprint(stack_b);
 }
 
 
-
-
-
-
+// sa :swap a- swap the first 2 elements at the top of stacka. Do nothing if thereis only one or no elements).
 
 
 
