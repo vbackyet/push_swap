@@ -16,6 +16,7 @@ typedef struct		s_stack
 {
 	int				num; //значение
 	int				pos; 
+  int       chunk;
 	struct s_stack	*next; // след значение
   struct s_stack	*prev; //предыд значение
 }					t_stack;
@@ -58,6 +59,7 @@ t_stack *insert_into_stack(int argc, char **argv)
     // printf("%d <- сколько аргументов\n",argc);
     stack = (t_stack *)malloc(sizeof(t_stack));
     stack->num = atoi(argv[1]);
+    stack->chunk = 0;
     stack->pos = pos_index;
     stack->next = NULL; // указатель на следующий узел
     stack->prev = NULL; // указатель на предыдущий узел
@@ -89,6 +91,79 @@ void listprint(t_stack *lst)
   }  // условие окончания обхода
 }
 
+int detect_len_of_stack(t_stack *stack)
+{
+  int i;
+
+  i = 0;
+  while (stack-> next != NULL)
+  {
+    i++;
+    stack = stack-> next;
+  }
+  return(i + 1);
+}
+
+t_stack *find_on_index(t_stack *stack_a, int index)
+{
+
+  while (index != stack_a->pos || !stack_a)
+  {
+    stack_a = stack_a -> next;
+    // printf("%d - %d",stack_a->pos, index);
+  }
+  return stack_a;
+}
+
+t_stack *reset_index(t_stack *stack_a)
+{
+  t_stack *tmp;
+  tmp = stack_a;
+  int i = 0;
+  while (tmp != NULL) 
+  {
+    // tmp -> pos += 1;
+    printf("{%d | %d}",tmp->num, tmp-> pos);
+    tmp = tmp->next; // переход к следующему узлу
+  }  // условие окончания обхода
+  return stack_a;
+}
+
+
+t_stack *sa(t_stack *stack_a)
+{
+  int len;
+  t_stack *tmp;
+
+  len = detect_len_of_stack(stack_a);
+  if (len > 1)
+  {
+    // printf("HERE !\n");
+    tmp = find_on_index(stack_a, 1);
+    stack_a -> next = find_on_index(stack_a, 2);
+    stack_a -> prev = tmp;
+    // printf("%d", stack_a->num);
+    // stack_a -> next = tmp;
+    tmp -> next = stack_a;
+    tmp -> prev = NULL;
+    stack_a = stack_a -> prev;
+    stack_a = reset_index(stack_a);
+  }
+  return(stack_a);
+}
+
+
+void *ss(t_stack **stack_a, t_stack **stack_b)
+{
+  *stack_a = sa(*stack_a);
+  *stack_b = sa(*stack_b);
+}
+
+
+// sa :swap a- swap the first 2 elements at the top of stack a. Do nothing if thereis only one or no elements).
+// sb :swap b- swap the first 2 elements at the top of stackb. Do nothing if thereis only one or no elements).
+// ss :sa and sb at the same time.
+ 
 
 int main(int argc, char **argv)
 {
@@ -104,10 +179,16 @@ int main(int argc, char **argv)
         write(1, "Error\n", 6);
     stack_a = insert_into_stack(argc, argv);
     stack_b = insert_into_stack(4, a);
+    ss(&stack_a, &stack_b);
+    printf("\na:");
+    stack_a = sa(stack_a);
+    listprint(stack_a);
+    printf("\nb:");
     listprint(stack_b);
+    printf("\n");
 }
 
-
+//atoi
 // sa :swap a- swap the first 2 elements at the top of stacka. Do nothing if thereis only one or no elements).
 
 
