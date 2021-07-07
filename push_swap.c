@@ -85,7 +85,8 @@ void listprint(t_stack *lst)
 {
   t_stack *p;
   p = lst;
-  while (p != NULL) {
+  while (p != NULL) 
+  {
     printf("{%d | %d}", p->num, p-> pos); // вывод значения элемента p
     p = p->next; // переход к следующему узлу
   }  // условие окончания обхода
@@ -122,9 +123,10 @@ t_stack *reset_index(t_stack *stack_a)
   int i = 0;
   while (tmp != NULL) 
   {
-    // tmp -> pos += 1;
-    printf("{%d | %d}",tmp->num, tmp-> pos);
+    tmp -> pos = i;
+    // printf("{%d | %d}",tmp->num, tmp-> pos);
     tmp = tmp->next; // переход к следующему узлу
+    i++;
   }  // условие окончания обхода
   return stack_a;
 }
