@@ -12,8 +12,105 @@ int check_the_argument(int argc, char **argv)
   return(0);
 }
 
+char	*ft_itoa_base(int n, int base, int uppercase)
+{
+	char	*str;
+	int		i;
+	int		length;
+
+	if (base < 2 || base > 16 || (base != 10 && n < 0))
+		return (NULL);
+	if (base == 10)
+		return (ft_itoa(n));
+	length = ft_nbrlen(n, base);
+	str = (char*)malloc(sizeof(*str) * (length + 1));
+	i = 0;
+	while (i < length)
+	{
+		if (base > 10 && (n % base >= 10) && uppercase)
+			str[i++] = (n % base) - 10 + 'A';
+		else if (base > 10 && (n % base >= 10))
+			str[i++] = (n % base) - 10 + 'a';
+		else
+			str[i++] = (n % base) + '0';
+		n /= base;
+	}
+	str[i] = '\0';
+	return (ft_strrev(str));
+}
 
 
+
+t_stack *find_on_value(t_stack *stack_a, int value)
+{
+  while (value != stack_a->num || !stack_a)
+  {
+    stack_a = stack_a -> next;
+    // printf("%d - %d",stack_a->pos, index);
+  }
+  return stack_a;
+}
+//  Быстрая сортировка и индексация
+
+
+int find_maximum(t_stack *stack, int the_index,int maximum)
+{
+	t_stack *begin;
+	t_stack *markable;
+
+	begin = stack;
+	while (stack->next != NULL) 
+	{
+		if (stack->num >= maximum && stack->index ==  -1)
+		{
+			maximum = stack->num;	
+		}
+		stack = stack-> next;
+	}
+	if (stack->num >= maximum && stack->index ==  -1)
+	{
+		maximum = stack->num;	
+	}
+	printf("[%d ]\n", maximum);
+	markable = find_on_value(begin, maximum);
+	// printf("<%d %d>",markable->pos, markable->num);
+	markable->index = the_index;
+	return maximum;
+}
+
+
+int find_minimum(t_stack *stack)
+{
+	int initial_min = stack->num;
+  while (stack -> next != NULL)
+  {
+	if (stack->num < initial_min)
+		initial_min = stack->num;
+    stack = stack -> next;
+    // printf("%d - %d",stack_a->pos, index);
+  }
+	if (stack->num < initial_min)
+		initial_min = stack->num;
+  return initial_min;
+}
+
+t_stack *sort_and_index(t_stack *stack)
+{
+	int len;
+	int max_num;
+	int value;
+
+	max_num = stack->num;
+	len = detect_len_of_stack(stack);
+	// printf("%d <---------",len);
+	while (len != 0)
+	{
+		value = find_maximum(stack, len-1, find_minimum(stack));
+		// max_num = find_on_value(stack, value)->num - 1;
+		len--;
+	}
+	return stack;
+}
 
 
 // https://github.com/sshiling/42-push_swap
@@ -28,16 +125,17 @@ t_stack *addelem(t_stack *stack, int number, int pos)
   temp->pos = pos;
   temp->next = p; // созданный узел указывает на следующий узел
   temp->prev = stack; // созданный узел указывает на предыдущий узел
+  temp->index = -1;
   if (p != NULL)
     p->prev = temp;
 }
 
 
-t_stack init_stack(int first_argumnent, int position)
-{
-  t_stack         *stack;
+// t_stack init_stack(int first_argumnent, int position)
+// {
+//   t_stack         *stack;
 
-}
+// }
 
 
 t_stack *insert_into_stack(int argc, char **argv)
@@ -50,9 +148,10 @@ t_stack *insert_into_stack(int argc, char **argv)
     pos_index = 0;
     // printf("%d <- сколько аргументов\n",argc);
     stack = (t_stack *)malloc(sizeof(t_stack));
+	stack->chunk = 0;
     stack->num = atoi(argv[1]);
-    stack->chunk = 0;
     stack->pos = pos_index;
+	stack->index = -1;
     stack->next = NULL; // указатель на следующий узел
     stack->prev = NULL; // указатель на предыдущий узел
     // printf("%d <- сколько аргументов\n",argc);
@@ -79,7 +178,7 @@ void listprint(t_stack *lst)
   p = lst;
   while (p != NULL) 
   {
-    printf("{%d | %d}", p->num, p-> pos); // вывод значения элемента p
+    printf("{%d | %d | %d}", p->num, p-> pos, p->index); // вывод значения элемента p
     p = p->next; // переход к следующему узлу
   }  // условие окончания обхода
 }
@@ -99,7 +198,6 @@ int detect_len_of_stack(t_stack *stack)
 
 t_stack *find_on_index(t_stack *stack_a, int index)
 {
-
   while (index != stack_a->pos || !stack_a)
   {
     stack_a = stack_a -> next;
@@ -138,25 +236,28 @@ int main(int argc, char **argv)
     if (check_the_argument(argc, argv))
         write(1, "Error\n", 6);
     stack_a = insert_into_stack(argc, argv);
-    stack_b = insert_into_stack(4, a);
-    ss(&stack_a, &stack_b);
+	stack_a = sort_and_index(stack_a);
+    // stack_b = insert_into_stack(4, a);
+	//  stack_b = sort_and_index(stack_b);
+    // ss(&stack_a, &stack_b);
+	printf("%s -++++++" ,ft_itoa_base(2, 2, 0));
     printf("\na:");
     listprint(stack_a);
-    printf("\nb:");
-    listprint(stack_b);
-    printf("\n");
+    // printf("\nb:");
+    // listprint(stack_b);
+    // printf("\n");
 
 
-    printf("\n\n\n\n\n");
+    // printf("\n\n\n\n\n");
 
 
 
-    rra(&stack_a);
-    printf("\na:");
-    listprint(stack_a);
-    printf("\nb:");
-    listprint(stack_b);
-    printf("\n");
+    // rra(&stack_a);
+    // printf("\na:");
+    // listprint(stack_a);
+    // printf("\nb:");
+    // listprint(stack_b);
+    // printf("\n");
 
 
 }

@@ -7,7 +7,8 @@ typedef struct		s_stack
 {
 	int				num; //значение
 	int				pos; 
-  int       chunk;
+	int 			index;
+ 	int				chunk;
 	struct s_stack	*next; // след значение
   struct s_stack	*prev; //предыд значение
 }					t_stack;
@@ -21,6 +22,9 @@ t_stack *find_on_index(t_stack *stack_a, int index);
 t_stack *insert_into_stack(int argc, char **argv);
 t_stack *addelem(t_stack *stack, int number, int pos);
 t_stack *reset_index(t_stack *stack_a);
+void listprint(t_stack *lst);
 
 
+// Почему два значени - сегменташн фолт
+// 
 #endif
