@@ -12,34 +12,46 @@ int check_the_argument(int argc, char **argv)
   return(0);
 }
 
-char	*ft_itoa_base(int n, int base, int uppercase)
-{
-	char	*str;
-	int		i;
-	int		length;
 
-	if (base < 2 || base > 16 || (base != 10 && n < 0))
-		return (NULL);
-	if (base == 10)
-		return (ft_itoa(n));
-	length = ft_nbrlen(n, base);
-	str = (char*)malloc(sizeof(*str) * (length + 1));
-	i = 0;
-	while (i < length)
-	{
-		if (base > 10 && (n % base >= 10) && uppercase)
-			str[i++] = (n % base) - 10 + 'A';
-		else if (base > 10 && (n % base >= 10))
-			str[i++] = (n % base) - 10 + 'a';
-		else
-			str[i++] = (n % base) + '0';
-		n /= base;
-	}
-	str[i] = '\0';
-	return (ft_strrev(str));
+
+int   ft_itoa_base_sneaky(int value, int base, char *str)
+{
+    char *ref = "0123456789ABCDEF";
+	static int itog;
+	itog = 0;
+
+
+    if (value < base)
+    {
+         *str = ref[value];
+		 int ia = str[0] - '0';
+		 itog += ia ;
+		 printf("{%d}", ia);
+         str++;
+    }
+    else if (value >= base)
+    {
+        ft_itoa_base_sneaky(value/base, base, str);
+        ft_itoa_base_sneaky(value % base, base, str);
+    }
+	return itog;
+	// printf(">>%d<<<<<<<",itog);
 }
 
+char    *ft_itoa_base(int value, int base)
+{
+    char *str;
+    char *tmp;
+	int itog;
+	itog = 0;
 
+    str = malloc(sizeof(char) * 32);
+    tmp = str;
+
+    ft_itoa_base_sneaky(value, base, tmp);
+	printf(">>%d<<<<<<<",itog);
+    return (str);
+}
 
 t_stack *find_on_value(t_stack *stack_a, int value)
 {
@@ -71,7 +83,6 @@ int find_maximum(t_stack *stack, int the_index,int maximum)
 	{
 		maximum = stack->num;	
 	}
-	printf("[%d ]\n", maximum);
 	markable = find_on_value(begin, maximum);
 	// printf("<%d %d>",markable->pos, markable->num);
 	markable->index = the_index;
@@ -240,7 +251,7 @@ int main(int argc, char **argv)
     // stack_b = insert_into_stack(4, a);
 	//  stack_b = sort_and_index(stack_b);
     // ss(&stack_a, &stack_b);
-	printf("%s -++++++" ,ft_itoa_base(2, 2, 0));
+	printf("++++%s-++++++-" ,ft_itoa_base(22, 2));
     printf("\na:");
     listprint(stack_a);
     // printf("\nb:");
