@@ -1,31 +1,48 @@
 #include "push_swap.h"
 
-t_stack *sa(t_stack *stack_a)
+
+int     ft_strcmp(char *s1, char *s2)
+{
+    int i;
+ 
+    i = 0;
+    while (s1[i] || s2[i])
+    {
+        if (s1[i] < s2[i])
+            return (-1);
+        if (s1[i] > s2[i])
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
+
+void sa(t_stack **stack_a)
 {
   int len;
   t_stack *tmp;
 
-  len = detect_len_of_stack(stack_a);
+  len = detect_len_of_stack(*stack_a);
   if (len > 1)
   {
-    tmp = find_on_index(stack_a, 1);
-    stack_a -> next = find_on_index(stack_a, 2);
-    stack_a -> prev = tmp;
+    tmp = find_on_index(*stack_a, 1);
+    (*stack_a)-> next = find_on_index(*stack_a, 2);
+    (*stack_a)-> prev = tmp;
     // printf("%d", stack_a->num);
     // stack_a -> next = tmp;
-    tmp -> next = stack_a;
+    tmp -> next = *stack_a;
     tmp -> prev = 0;
-    stack_a = stack_a -> prev;
-    stack_a = reset_index(stack_a);
+    *stack_a = (*stack_a)-> prev;
+    *stack_a = reset_index(*stack_a);
   }
-  return(stack_a);
 }
 
 
-void *ss(t_stack **stack_a, t_stack **stack_b)
+void ss(t_stack **stack_a, t_stack **stack_b)
 {
-  *stack_a = sa(*stack_a);
-  *stack_b = sa(*stack_b);
+  sa(stack_a);
+  sa(stack_b);
 }
 
 void *pa(t_stack **stack_a, t_stack **stack_b)
@@ -80,6 +97,39 @@ void rra(t_stack **stack_a)
   *stack_a = reset_index(*stack_a);
 }
 
+
+
+void perform_command(t_stack **stack_a,t_stack **stack_b, char *command)
+{
+  if (ft_strcmp(command, "ra") == 1)
+    ra(stack_a);
+  if (ft_strcmp(command, "ra") == 1)
+    ra(stack_b);
+  if (ft_strcmp(command, "sa") == 1)
+    sa(stack_a);
+  if (ft_strcmp(command, "sb") == 1)
+    sa(stack_b);
+  if (ft_strcmp(command, "ss") == 1)
+    ss(stack_a,stack_b);
+  if (ft_strcmp(command, "rr") == 1)
+  {
+    ra(stack_a);
+    ra(stack_b);
+  }
+  if (ft_strcmp(command, "rra") == 1)
+    rra(stack_a);
+  if (ft_strcmp(command, "rrb") == 1)
+    rra(stack_b);
+  if (ft_strcmp(command, "rrr") == 1)
+  {
+    rra(stack_a);
+    rra(stack_b);
+  }
+  if (ft_strcmp(command, "pa") == 1)
+    pa(stack_a, stack_b);
+  if (ft_strcmp(command, "pb") == 1)
+    pa(stack_b, stack_a);
+}
 // sa :swap a- swap the first 2 elements at the top of stack a. Do nothing if thereis only one or no elements).
 // sb :swap b- swap the first 2 elements at the top of stackb. Do nothing if thereis only one or no elements).
 // ss :sa and sb at the same time.

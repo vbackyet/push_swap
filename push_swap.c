@@ -120,6 +120,8 @@ t_stack *make_base(t_stack *stack)
     stack->base = ft_itoa_base_sneaky(stack->index , 2, 1);
     stack = stack-> next;
   }
+  stack->base = ft_itoa_base_sneaky(stack->index , 2, 1);
+
 	return tmp;
 }
 
@@ -155,10 +157,10 @@ t_stack *insert_into_stack(int argc, char **argv)
     pos_index = 0;
     // printf("%d <- сколько аргументов\n",argc);
     stack = (t_stack *)malloc(sizeof(t_stack));
-	stack->chunk = 0;
+	  stack->chunk = 0;
     stack->num = atoi(argv[1]);
     stack->pos = pos_index;
-	stack->index = -1;
+	  stack->index = -1;
     stack->next = NULL; // указатель на следующий узел
     stack->prev = NULL; // указатель на предыдущий узел
     // printf("%d <- сколько аргументов\n",argc);
@@ -229,10 +231,36 @@ t_stack *reset_index(t_stack *stack_a)
 }
 
 
+int depth(int base)
+{
+  int depth;
+  depth = 1;
+
+  while (base/10 > 0)
+  {
+    depth++;
+    base = base/10;
+  }
+
+
+  return depth;
+}
+
+
 
 t_stack *sort_the_stack(t_stack *stack_a,t_stack *stack_b)
 {
    //Here we treat A as box 1 and B as box 0
+   //At the i-th digit from the right, if the i-th digit of the top number of A is 0, we perform pb to put this number in stack B. 
+   //Else, we perform ra to leave it in stack A. After we perform one operation on each number, each of them is in the box that corresponds 
+   //to its digit, as how we put numbers in the boxes in radix sort.
+  //1) узнать длину последнего номера
+  //2) пройти цикл столько раз 
+  //3) узнать длину стаки и пройтись по циклу и закидывать pb /ra
+  //4) все получилось алилуя
+  // int length_the_biggest = depth(find_on_value(find_maximum(stack_a))->base);
+
+
 }
 
 
@@ -253,12 +281,18 @@ int main(int argc, char **argv)
     stack_a = make_base(stack_a);
     printf("\nbefore:");
     listprint(stack_a);
-    stack_a = sort_the_stack(stack_a, stack_b);
-    // stack_b = insert_into_stack(4, a);
+    //stack_a = sort_the_stack(stack_a, stack_b);
+    printf("\ndelenie %d\n", depth(8));
+    stack_b = insert_into_stack(4, a);
     //  stack_b = sort_and_index(stack_b);
-    // ss(&stack_a, &stack_b);
+    // perform_command(&stack_a, &stack_b, "rrr");
+    
+    
     printf("\nafter:");
     listprint(stack_a);
+    
+    
+    
     // printf("\nb:");
     // listprint(stack_b);
     // printf("\n");
