@@ -14,44 +14,31 @@ int check_the_argument(int argc, char **argv)
 
 
 
-int   ft_itoa_base_sneaky(int value, int base, char *str)
+static int   ft_itoa_base_sneaky(int value, int base, int flag)
 {
     char *ref = "0123456789ABCDEF";
-	static int itog;
-	itog = 0;
-
-
+    static int itog = 0;
+    if (flag)
+    {
+      itog = 0;
+      flag = 0;
+    }
     if (value < base)
     {
-         *str = ref[value];
-		 int ia = str[0] - '0';
-		 itog += ia ;
-		 printf("{%d}", ia);
-         str++;
+         //*str = ref[value];
+      int ia = ref[value] - '0';
+      itog = itog*10 + ia ;
+         //str++;
     }
     else if (value >= base)
     {
-        ft_itoa_base_sneaky(value/base, base, str);
-        ft_itoa_base_sneaky(value % base, base, str);
+        ft_itoa_base_sneaky(value/base, base,0);
+        ft_itoa_base_sneaky(value % base, base, 0);
     }
-	return itog;
-	// printf(">>%d<<<<<<<",itog);
+	  return itog;	  
 }
 
-char    *ft_itoa_base(int value, int base)
-{
-    char *str;
-    char *tmp;
-	int itog;
-	itog = 0;
 
-    str = malloc(sizeof(char) * 32);
-    tmp = str;
-
-    ft_itoa_base_sneaky(value, base, tmp);
-	printf(">>%d<<<<<<<",itog);
-    return (str);
-}
 
 t_stack *find_on_value(t_stack *stack_a, int value)
 {
@@ -123,6 +110,20 @@ t_stack *sort_and_index(t_stack *stack)
 	return stack;
 }
 
+t_stack *make_base(t_stack *stack)
+{
+  t_stack *tmp;
+
+  tmp = stack;
+  while (stack-> next != NULL)
+  {
+    stack->base = ft_itoa_base_sneaky(stack->index , 2, 1);
+    stack = stack-> next;
+  }
+	return tmp;
+}
+
+
 
 // https://github.com/sshiling/42-push_swap
 
@@ -142,11 +143,6 @@ t_stack *addelem(t_stack *stack, int number, int pos)
 }
 
 
-// t_stack init_stack(int first_argumnent, int position)
-// {
-//   t_stack         *stack;
-
-// }
 
 
 t_stack *insert_into_stack(int argc, char **argv)
@@ -189,7 +185,7 @@ void listprint(t_stack *lst)
   p = lst;
   while (p != NULL) 
   {
-    printf("{%d | %d | %d}", p->num, p-> pos, p->index); // вывод значения элемента p
+    printf("{%d | %d }", p->index, p->base); // вывод значения элемента p
     p = p->next; // переход к следующему узлу
   }  // условие окончания обхода
 }
@@ -234,6 +230,12 @@ t_stack *reset_index(t_stack *stack_a)
 
 
 
+t_stack *sort_the_stack(t_stack *stack_a,t_stack *stack_b)
+{
+   //Here we treat A as box 1 and B as box 0
+}
+
+
 int main(int argc, char **argv)
 {
     t_stack         *stack_a;
@@ -247,12 +249,15 @@ int main(int argc, char **argv)
     if (check_the_argument(argc, argv))
         write(1, "Error\n", 6);
     stack_a = insert_into_stack(argc, argv);
-	stack_a = sort_and_index(stack_a);
+    stack_a = sort_and_index(stack_a);
+    stack_a = make_base(stack_a);
+    printf("\nbefore:");
+    listprint(stack_a);
+    stack_a = sort_the_stack(stack_a, stack_b);
     // stack_b = insert_into_stack(4, a);
-	//  stack_b = sort_and_index(stack_b);
+    //  stack_b = sort_and_index(stack_b);
     // ss(&stack_a, &stack_b);
-	printf("++++%s-++++++-" ,ft_itoa_base(22, 2));
-    printf("\na:");
+    printf("\nafter:");
     listprint(stack_a);
     // printf("\nb:");
     // listprint(stack_b);

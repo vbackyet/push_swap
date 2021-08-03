@@ -9,6 +9,7 @@ typedef struct		s_stack
 	int				pos; 
 	int 			index;
  	int				chunk;
+	int 			base;
 	struct s_stack	*next; // след значение
   struct s_stack	*prev; //предыд значение
 }					t_stack;
