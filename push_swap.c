@@ -77,6 +77,32 @@ int find_maximum(t_stack *stack, int the_index,int maximum)
 }
 
 
+int find_maximum_value(t_stack *stack)
+{
+	t_stack *begin;
+	t_stack *markable;
+
+	begin = stack;
+  int maximum = stack->num;
+	while (stack->next != NULL) 
+	{
+		if (stack->num >= maximum)
+		{
+			maximum = stack->num;	
+		}
+		stack = stack-> next;
+	}
+	if (stack->num >= maximum)
+	{
+		maximum = stack->num;	
+	}
+	return maximum;
+}
+
+
+
+
+
 int find_minimum(t_stack *stack)
 {
 	int initial_min = stack->num;
@@ -185,11 +211,16 @@ void listprint(t_stack *lst)
 {
   t_stack *p;
   p = lst;
-  while (p != NULL) 
+  if (p!= NULL)
   {
-    printf("{%d | %d }", p->index, p->base); // вывод значения элемента p
-    p = p->next; // переход к следующему узлу
-  }  // условие окончания обхода
+    while (p != NULL) 
+    {
+      printf("{%d | %d }", p->index, p->base); // вывод значения элемента p
+      p = p->next; // переход к следующему узлу
+    }  // условие окончания обхода
+  }
+  else
+    printf("empty chain!\n");
 }
 
 int detect_len_of_stack(t_stack *stack)
@@ -246,7 +277,22 @@ int depth(int base)
   return depth;
 }
 
-
+int     ft_power(int nb, int power)
+{
+    if (power < 0)
+        return 0;
+    int tmp;
+    int r;
+ 
+    tmp = 1;
+    r = 1;
+    while (tmp <= power)
+    {
+        r = r * nb;
+        tmp++;
+    }
+    return r;
+}
 
 t_stack *sort_the_stack(t_stack *stack_a,t_stack *stack_b)
 {
@@ -258,10 +304,73 @@ t_stack *sort_the_stack(t_stack *stack_a,t_stack *stack_b)
   //2) пройти цикл столько раз 
   //3) узнать длину стаки и пройтись по циклу и закидывать pb /ra
   //4) все получилось алилуя
-  // int length_the_biggest = depth(find_on_value(find_maximum(stack_a))->base);
 
+   //Here we treat A as box 1 and B as box 0
+   //At the i-th digit from the right, if the i-th digit of the top number of A is 0, we perform pb to put this number in stack B. 
+   //Else, we perform ra to leave it in stack A. After we perform one operation on each number, each of them is in the box that corresponds 
+   //to its digit, as how we put numbers in the boxes in radix sort.
+  //1) узнать длину последнего номера
+  //2) пройти цикл столько раз 
+  //3) узнать длину стаки и пройтись по циклу и закидывать pb /ra
+  //4) все получилось алилуя
+  int length_the_biggest = depth(find_on_value(stack_a,find_maximum_value(stack_a))->base);
+  int i = 1;
+  
+  while (length_the_biggest)
+  {
+    int length_of_the_stacky = detect_len_of_stack(stack_a);
+    printf("<%d>", length_of_the_stacky); 
+    while (length_of_the_stacky > 0)
+    {
+      printf("HERE [%d]",((stack_a->base)/ft_power(10, i-1)) % ft_power(10, i));
 
+      if (((stack_a->base)/ft_power(10, i-1)) % ft_power(10, i) == 0)
+        
+        {
+        printf("\na:");
+        listprint(stack_a);
+        printf("\nb:");
+        listprint(stack_b);
+        perform_command(&stack_a, &stack_b, "pb");
+        printf("\nafter\na:");
+        listprint(stack_a);
+        printf("\nafter\nb:");
+        listprint(stack_b);
+        printf("]]]]");
+        }
+      else
+      {
+        perform_command(&stack_a, &stack_b, "ra");
+        printf("HERE2 ");
+       
+      }
+      length_of_the_stacky--;
+      printf("%d - length_of_the_stacky\n", length_of_the_stacky);
+    }
+    while(stack_b!= NULL)
+        {
+        printf("ПЕРКИДЫВАЮ В ДРУГОЙ СТАК\n");  
+        perform_command(&stack_a, &stack_b, "pa");
+        //printf("\nafter\nb:");
+        listprint(stack_a);  
+        listprint(stack_b);   
+        if (stack_b == NULL)
+          printf("KOTIK");
+        }
+    length_the_biggest--;
+    i++;     
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!  %d  %d!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", length_the_biggest, i);
+            listprint(stack_a);  
+        listprint(stack_b);   
+
+  }
+  return stack_a;
 }
+
+
+//Сделать b нулевым
+//Сделать перекидывание до нуля!
+
 
 
 int main(int argc, char **argv)
@@ -281,13 +390,14 @@ int main(int argc, char **argv)
     stack_a = make_base(stack_a);
     printf("\nbefore:");
     listprint(stack_a);
-    //stack_a = sort_the_stack(stack_a, stack_b);
-    printf("\ndelenie %d\n", depth(8));
-    stack_b = insert_into_stack(4, a);
+    stack_b = NULL;
+    //stack_b = insert_into_stack(4, a);
+    //stack_b = sort_and_index(stack_b);
+    //stack_b = make_base(stack_b);
+    stack_a = sort_the_stack(stack_a, stack_b);
+    
     //  stack_b = sort_and_index(stack_b);
-    // perform_command(&stack_a, &stack_b, "rrr");
-    
-    
+    //perform_command(&stack_a, &stack_b, "pa");
     printf("\nafter:");
     listprint(stack_a);
     
