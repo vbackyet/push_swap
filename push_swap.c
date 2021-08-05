@@ -319,29 +319,26 @@ t_stack *sort_the_stack(t_stack *stack_a,t_stack *stack_b)
   while (length_the_biggest)
   {
     int length_of_the_stacky = detect_len_of_stack(stack_a);
-    printf("<%d>", length_of_the_stacky); 
-    while (length_of_the_stacky > 0)
-    {
-      printf("HERE [%d]",((stack_a->base)/ft_power(10, i-1)) % ft_power(10, i));
-
-      if (((stack_a->base)/ft_power(10, i-1)) % ft_power(10, i) == 0)
-        
-        {
+    printf("%d", i);
         printf("\na:");
         listprint(stack_a);
         printf("\nb:");
         listprint(stack_b);
+    while (length_of_the_stacky > 0)
+    {
+      printf("HERE [%d]",((stack_a->base)/ft_power(10, i-1)) % 10);
+
+      if ((((stack_a->base)/ft_power(10, i-1)) % 10) == 0)
+        
+        {
+
         perform_command(&stack_a, &stack_b, "pb");
-        printf("\nafter\na:");
-        listprint(stack_a);
-        printf("\nafter\nb:");
-        listprint(stack_b);
-        printf("]]]]");
+
         }
       else
       {
         perform_command(&stack_a, &stack_b, "ra");
-        printf("HERE2 ");
+
        
       }
       length_of_the_stacky--;
@@ -352,16 +349,12 @@ t_stack *sort_the_stack(t_stack *stack_a,t_stack *stack_b)
         printf("ПЕРКИДЫВАЮ В ДРУГОЙ СТАК\n");  
         perform_command(&stack_a, &stack_b, "pa");
         //printf("\nafter\nb:");
-        listprint(stack_a);  
-        listprint(stack_b);   
+
         if (stack_b == NULL)
           printf("KOTIK");
         }
     length_the_biggest--;
     i++;     
-    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!  %d  %d!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", length_the_biggest, i);
-            listprint(stack_a);  
-        listprint(stack_b);   
 
   }
   return stack_a;
