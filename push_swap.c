@@ -41,6 +41,23 @@ static int   ft_itoa_base_sneaky(int value, int base, int flag)
 	  return itog;	  
 }
 
+// int		ft_strcmp(const char *s1, const char *s2)
+// {
+// 	unsigned char	*ptr1;
+// 	unsigned char	*ptr2;
+// 	size_t			i;
+
+// 	ptr1 = (unsigned char *)s1;
+// 	ptr2 = (unsigned char *)s2;
+// 	i = 0;
+// 	while (ptr1[i] || ptr2[i])
+// 	{
+// 		if (ptr1[i] != ptr2[i])
+// 			return (ptr1[i] - ptr2[i]);
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
 
 int is_duplicate(int argc, char *el, char **spisok, int el_of_my_ind)
@@ -48,13 +65,43 @@ int is_duplicate(int argc, char *el, char **spisok, int el_of_my_ind)
   int i = argc - 1;
   while (i > el_of_my_ind)
   {
-    if (spisok[i] == el)
+    // printf("(%s) (%s) %d\n", el,spisok[i],ft_strcmp(spisok[i], el));
+    if (!(ft_strcmp(spisok[i],  el)))
     {
+      
         return(1);
     }
     i--;
   }
   return(0);
+}
+
+signed long long int		ft_atoi(const char *str)
+{
+	int i;
+	signed long long int nbr;
+	int negative;
+
+	nbr = 0;
+	negative = 0;
+	i = 0;
+	while ((str[i] == '\n') || (str[i] == '\t') || (str[i] == '\v') ||
+			(str[i] == ' ') || (str[i] == '\f') || (str[i] == '\r'))
+		i++;
+	if (str[i] == '-')
+		negative = 1;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	while (str[i] && (str[i] >= '0') && (str[i] <= '9'))
+	{
+		nbr *= 10;
+		nbr += (int)str[i] - '0';
+		i++;
+	}
+	if (negative == 1)
+		return (-nbr);
+	else
+		return (nbr);
 }
 
 
@@ -70,7 +117,8 @@ int check_the_argument(int argc, char **argv)
       return(1);
     if (is_duplicate(argc, argv[i], argv, i))
       return(2);
-    if (atoi(argv[i]) > 2147483647 || atoi(argv[i]) < -2147483648)
+      // printf("%lli\n", ft_atoi(argv[i]));
+    if (ft_atoi(argv[i]) > 2147483647 || ft_atoi(argv[i]) < -2147483648)
       return(3);
     i--;
   }
