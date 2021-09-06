@@ -4,14 +4,17 @@
 #include "push_swap.h"
 
 
-
-int check_the_argument(int argc, char **argv)
+int is_not_digit(char *my_arg)
 {
-    //Проверка аргументов
-    //some arguments aren’t integers, some arguments arebigger than an integer, and/or there are duplicates.
+  int i =0;
+  while (my_arg[i])
+  {
+    if (my_arg[i] < '0' || my_arg[i] > '9')
+      return(1);
+    i++;
+  }
   return(0);
 }
-
 
 
 static int   ft_itoa_base_sneaky(int value, int base, int flag)
@@ -37,6 +40,45 @@ static int   ft_itoa_base_sneaky(int value, int base, int flag)
     }
 	  return itog;	  
 }
+
+
+
+int is_duplicate(int argc, char *el, char **spisok, int el_of_my_ind)
+{
+  int i = argc - 1;
+  while (i > el_of_my_ind)
+  {
+    if (spisok[i] == el)
+    {
+        return(1);
+    }
+    i--;
+  }
+  return(0);
+}
+
+
+
+int check_the_argument(int argc, char **argv)
+{
+    //Проверка аргументов
+    //some arguments aren’t integers, some arguments arebigger than an integer, and/or there are duplicates.
+  int i = argc - 1;
+  while (i > 0)
+  {
+    if (is_not_digit(argv[i]))
+      return(1);
+    if (is_duplicate(argc, argv[i], argv, i))
+      return(2);
+    if (atoi(argv[i]) > 2147483647 || atoi(argv[i]) < -2147483648)
+      return(3);
+    i--;
+  }
+  return(0);
+}
+
+
+
 
 
 
@@ -315,6 +357,11 @@ t_stack *sort_little_stack(t_stack *stack_a,t_stack *stack_b, int len_of_the_sta
 //   With 3 numbers, we need to sort it with not more than 3 instructions.
 
 //   With 5 numbers, we need to sort it with not more than 12 instructions.
+    if (the_stack_is_sorted(stack_a) && (detect_len_of_stack(stack_b) == 0))
+    {
+      // printf("YHE_STACK_IS SORTED");
+      return stack_a;
+    }
   int counter_of_operations = 0;
   int max = find_maximum_value(stack_a);
   int min = find_minimum(stack_a);
@@ -347,8 +394,8 @@ t_stack *sort_little_stack(t_stack *stack_a,t_stack *stack_b, int len_of_the_sta
 		else
 			perform_command(&stack_a, &stack_b, "ra");
 	  }
-    listprint(stack_a);
-    stack_a = sort_little_stack(stack_a, stack_b, 3);
+
+    stack_a = sort_little_stack(stack_a, stack_b, len_of_the_stack - 2);
     perform_command(&stack_a, &stack_b, "pa");
     perform_command(&stack_a, &stack_b, "pa");
     if (stack_a->num == find_maximum_value(stack_a))
@@ -360,7 +407,7 @@ t_stack *sort_little_stack(t_stack *stack_a,t_stack *stack_b, int len_of_the_sta
     }
 
   }
-  printf("\ncounter :%d\n", counter_of_operations);
+  // printf("\ncounter :%d\n", counter_of_operations);
         return stack_a;
 }
 
@@ -397,19 +444,19 @@ t_stack *sort_big_stack(t_stack *stack_a,t_stack *stack_b)
   while (length_the_biggest)
   {
     int length_of_the_stacky = detect_len_of_stack(stack_a);
-    if (the_stack_is_sorted(stack_a))
+    if (the_stack_is_sorted(stack_a) && (detect_len_of_stack(stack_b) == 0))
     {
-      printf("YHE_STACK_IS SORTED");
+      // printf("YHE_STACK_IS SORTED");
       return stack_a;
     }
-    printf("%d", i);
-        printf("\na:");
-        listprint(stack_a);
-        printf("\nb:");
-        listprint(stack_b);
+    // printf("%d", i);
+        // printf("\na:");
+        // listprint(stack_a);
+        // printf("\nb:");
+        // listprint(stack_b);
     while (length_of_the_stacky > 0)
     {
-      printf("HERE [%d]",((stack_a->base)/ft_power(10, i-1)) % 10);
+      // printf("HERE [%d]",((stack_a->base)/ft_power(10, i-1)) % 10);
 
       if ((((stack_a->base)/ft_power(10, i-1)) % 10) == 0)
         
@@ -426,7 +473,7 @@ t_stack *sort_big_stack(t_stack *stack_a,t_stack *stack_b)
        
       }
       length_of_the_stacky--;
-      printf("%d - length_of_the_stacky\n", length_of_the_stacky);
+      // printf("%d - length_of_the_stacky\n", length_of_the_stacky);
     }
     while(stack_b!= NULL)
         { 
@@ -434,14 +481,14 @@ t_stack *sort_big_stack(t_stack *stack_a,t_stack *stack_b)
         //printf("\nafter\nb:");
         counter_of_operations++;
 
-        if (stack_b == NULL)
-          printf("KOTIK");
+        // if (stack_b == NULL)
+          // printf("KOTIK");
         }
     length_the_biggest--;
     i++;     
 
   }
-  printf("\ncounter :%d\n", counter_of_operations);
+  // printf("\ncounter :%d\n", counter_of_operations);
   return stack_a;
 }
 
@@ -449,7 +496,7 @@ t_stack *sort_big_stack(t_stack *stack_a,t_stack *stack_b)
 t_stack *sort_the_stack(t_stack *stack_a,t_stack *stack_b)
 {
   int len_of_the_stack =  detect_len_of_stack(stack_a);
-  printf("\n%d length of the stack\n", len_of_the_stack);
+  // printf("\n%d length of the stack\n", len_of_the_stack);
   if (len_of_the_stack > 5)
     return(sort_big_stack(stack_a,stack_b));
   else
@@ -468,12 +515,16 @@ int main(int argc, char **argv)
     a[2] = "3";
     a[3] = "4";
     if (check_the_argument(argc, argv))
+    {
         write(1, "Error\n", 6);
+        printf("%d\n", check_the_argument(argc, argv));
+        return(1);
+    }
     stack_a = insert_into_stack(argc, argv);
     stack_a = sort_and_index(stack_a);
     stack_a = make_base(stack_a);
     //printf("\nstack_is_sorted: %d", the_stack_is_sorted(stack_a));
-    listprint(stack_a);
+    // listprint(stack_a);
     stack_b = NULL;
     //stack_b = insert_into_stack(4, a);
     //stack_b = sort_and_index(stack_b);
@@ -482,8 +533,8 @@ int main(int argc, char **argv)
     
     //  stack_b = sort_and_index(stack_b);
     //perform_command(&stack_a, &stack_b, "pa");
-    printf("\nafter:");
-    listprint(stack_a);
+    // printf("\nafter:");
+    // listprint(stack_a);
     
     
     

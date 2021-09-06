@@ -148,6 +148,7 @@ void perform_command(t_stack **stack_a,t_stack **stack_b, char *command)
     pa(stack_a, stack_b);}
   if (ft_strcmp(command, "pa") == 0)
     pa(stack_b, stack_a);
+  printf("%s\n", command);
 }
 // sa :swap a- swap the first 2 elements at the top of stack a. Do nothing if thereis only one or no elements).
 // sb :swap b- swap the first 2 elements at the top of stackb. Do nothing if thereis only one or no elements).
