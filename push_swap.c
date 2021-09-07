@@ -9,7 +9,7 @@ int is_not_digit(char *my_arg)
   int i =0;
   while (my_arg[i])
   {
-    if (my_arg[i] < '0' || my_arg[i] > '9')
+    if ((my_arg[i] < '0' || my_arg[i] > '9') && (my_arg[i] != '-'))
       return(1);
     i++;
   }
@@ -550,6 +550,85 @@ t_stack *sort_the_stack(t_stack *stack_a,t_stack *stack_b)
   else
     return(sort_little_stack(stack_a,stack_b, len_of_the_stack));
 }
+////
+static int	ft_strchar(char to_find, char *str)
+{
+	char	*sptr;
+
+	sptr = str;
+	while (*sptr != '\0')
+		if (to_find == *sptr++)
+			return (1);
+	return (0);
+}
+
+static int	ft_wc(char *str, char *charset)
+{
+	int		i;
+
+	i = 0;
+	while (*str)
+		if (ft_strchar(*str, charset))
+			++str;
+		else
+		{
+			++i;
+			++str;
+			while (*str && !ft_strchar(*str, charset))
+				++str;
+		}
+	return (i);
+}
+
+static char	*ft_split_w(char **str, char *charset)
+{
+	char	*bptr;
+	char	*bsptr;
+	char	*sptr;
+
+	sptr = *str;
+	while (ft_strchar(*sptr, charset))
+		++sptr;
+	*str = sptr;
+	while (!ft_strchar(*sptr, charset))
+		++sptr;
+	bptr = malloc(sptr - *str);
+	if (!bptr)
+		return (NULL);
+	bsptr = bptr;
+	while (sptr > *str)
+		*bsptr++ = *((*str)++);
+	*bsptr = '\0';
+	while (**str && ft_strchar(**str, charset))
+		++*str;
+	return (bptr);
+}
+
+char		**ft_split(char *str, char *charset)
+{
+	char	**buffer;
+	char	**bptr;
+	int		i;
+
+	i = ft_wc(str, charset);
+	if (!(buffer = malloc((i + 1) * sizeof(char *))))
+		return (NULL);
+	bptr = buffer;
+	while (i--)
+		if (!(*bptr++ = ft_split_w(&str, charset)))
+			return (NULL);
+	*bptr = (NULL);
+	return (buffer);
+}
+ ////
+
+int len_of_the_args(char **my_values)
+{
+  int i = 0;
+  while (my_values[i])
+    i++;
+  return(i);
+}
 
 
 int main(int argc, char **argv)
@@ -562,12 +641,20 @@ int main(int argc, char **argv)
     a[1] = "2";
     a[2] = "3";
     a[3] = "4";
+    //if (argc == 2)
+    //{
+      //char **my_values = ft_split(argv[1], " ");
+      //printf("%s %d\n", my_values[0], len_of_the_args(my_values));
+      //argc += (len_of_the_args(my_values) - 2);
+      //argv = my_values;
+    //}
     if (check_the_argument(argc, argv))
     {
         write(1, "Error\n", 6);
-        printf("%d\n", check_the_argument(argc, argv));
+        //printf("%d\n", check_the_argument(argc, argv));
         return(1);
     }
+
     stack_a = insert_into_stack(argc, argv);
     stack_a = sort_and_index(stack_a);
     stack_a = make_base(stack_a);
