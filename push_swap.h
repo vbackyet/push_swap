@@ -3,6 +3,7 @@
 # define PUSH_SWAP_H
 
 // #include <stddef.h>
+# include	"get_next_line/get_next_line.h"
 typedef struct		s_stack
 {
 	int				num; //значение
@@ -23,7 +24,7 @@ void ra(t_stack **stack_a);
 void rra(t_stack **stack_a);
 t_stack *find_on_index(t_stack *stack_a, int index);
 t_stack *insert_into_stack(int argc, char **argv);
-t_stack *addelem(t_stack *stack, int number, int pos);
+void addelem(t_stack *stack, int number, int pos);
 t_stack *reset_index(t_stack *stack_a);
 void listprint(t_stack *lst);
 int     ft_strcmp(char *s1, char *s2);
