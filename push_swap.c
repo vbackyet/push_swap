@@ -276,7 +276,7 @@ t_stack *insert_into_stack(int argc, char **argv)
 	  stack->chunk = 0;
     stack->num = atoi(argv[1]);
     stack->pos = pos_index;
-	  stack->index = -1;
+	stack->index = -1;
     stack->next = NULL; // указатель на следующий узел
     stack->prev = NULL; // указатель на предыдущий узел
     // printf("%d <- сколько аргументов\n",argc);
@@ -305,7 +305,7 @@ void listprint(t_stack *lst)
   {
     while (p != NULL) 
     {
-      printf("{%d | %d }", p->index, p->base); // вывод значения элемента p
+      printf("{ %d | %d}",p->num, p->pos); // вывод значения элемента p
       p = p->next; // переход к следующему узлу
     }  // условие окончания обхода
   }
@@ -476,15 +476,6 @@ t_stack *sort_big_stack(t_stack *stack_a,t_stack *stack_b)
   //2) пройти цикл столько раз 
   //3) узнать длину стаки и пройтись по циклу и закидывать pb /ra
   //4) все получилось алилуя
-
-   //Here we treat A as box 1 and B as box 0
-   //At the i-th digit from the right, if the i-th digit of the top number of A is 0, we perform pb to put this number in stack B. 
-   //Else, we perform ra to leave it in stack A. After we perform one operation on each number, each of them is in the box that corresponds 
-   //to its digit, as how we put numbers in the boxes in radix sort.
-  //1) узнать длину последнего номера
-  //2) пройти цикл столько раз 
-  //3) узнать длину стаки и пройтись по циклу и закидывать pb /ra
-  //4) все получилось алилуя
   int length_the_biggest = depth(find_on_value(stack_a,find_maximum_value(stack_a))->base);
   int i = 1;
   int counter_of_operations = 0;
@@ -632,45 +623,3 @@ int len_of_the_args(char **my_values)
 
 
 
-
-//atoi
-// sa :swap a- swap the first 2 elements at the top of stacka. Do nothing if thereis only one or no elements).
-
-
-
-
-
-// pb  pops the first elememt on A and puts it on top of B
-// ra  rotates stuck A up by one
-
-// 1) Стак А в массив
-// 2) отсортировать
-// 45 34 1 23 6 3
-// 1 3 6 23 34 45
-// 3) Найти индекс миддла
-// 2 индекс - 23
-
-// 4) Я хожу по стаку А и все что меньше 23 перекидываю в стак Б
-// 4.1 - 45 - не меньше чем 23 - идем ra
-// 3 6 23 1 34 45 
-// 4.2 - 3 - pb 
-// 4.3 - 6 - pb
-// 4.4 - 23 нет 45 тоже нет
-// поэтому мы в топ переводим все пока не анйдем то что меньше и то что 3 элиента 
-// 45 34 1 23 ra 
-// 34 1 23 45
-// 1 23 45 34 - pb
-// 23 45 34 
-// 5) Повторить то же самое с остатком (23 45 34) -> 23 34 45
-// Серединка 45
-// Нам повезло 23 -  меньше чем 45 
-// Что у нас в стаке 45 
-// (23 1 6 3) и сам миддл 34
-// (34 23 1 6 3)
-// 6) Делаем пока не останется 2 или меньше елементов- при необходимости сорируем
-// ({45} {23} {1 6 3})
-// 7)Делать то же самое только в обратном порядке
-// [45] - > [34] -> [23] -> []
-// 1) Еслив оставшемяся больше чем 2 чанка - то мы не можем просто делаем 
-// rb -  а когда нашли то rrb - чтобы все исправить!!!!
-// СДЕЛАТЬ чекер на то что чанк уже остортирован!!!!

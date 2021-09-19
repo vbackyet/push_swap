@@ -87,6 +87,8 @@ void ra(t_stack **stack_a)
   int len;
 
   len = detect_len_of_stack(*stack_a);
+  if (len < 2)
+	return;
   head = (*stack_a);
   (*stack_a)  = (*stack_a)-> next;
   (*stack_a)-> prev = 0;
@@ -103,6 +105,8 @@ void rra(t_stack **stack_a)
   int len;
 
   len = detect_len_of_stack(*stack_a);
+	if (len < 2)
+	return;
   tail = find_on_index(*stack_a,len -1);
   find_on_index(*stack_a,len -2) -> next = 0;
   tail -> prev = 0;
