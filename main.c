@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     //stack_b = sort_and_index(stack_b);
     //stack_b = make_base(stack_b);
     stack_a = sort_the_stack(stack_a, stack_b);
-    sleep(1000000);
+   // sleep(1000000);
     //  stack_b = sort_and_index(stack_b);
     //perform_command(&stack_a, &stack_b, "pa");
     // printf("\nafter:");
@@ -56,5 +56,5 @@ int main(int argc, char **argv)
     // listprint(stack_b);
     // printf("\n");
 
-
+	
 }
