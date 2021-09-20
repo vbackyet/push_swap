@@ -2,27 +2,39 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "push_swap.h"
+# include	"get_next_line1/get_next_line.h"
+
 
 
 int main(int argc, char **argv)
 {
     t_stack         *stack_a;
     t_stack         *stack_b;
-    //if (argc == 2)
-    //{
-      //char **my_values = ft_split(argv[1], " ");
-      //printf("%s %d\n", my_values[0], len_of_the_args(my_values));
-      //argc += (len_of_the_args(my_values) - 2);
-      //argv = my_values;
-    //}
-    if (check_the_argument(argc, argv))
+    int flag = 1;
+    if (argc == 2)
+    {
+      char **my_values = ft_split(argv[1], " ");
+      // printf("%s %d\n", my_values[0], len_of_the_args(my_values));
+      if (len_of_the_args(my_values) > 1)
+      {
+        
+      argc += (len_of_the_args(my_values) - 2);
+      // printf("%d\n", argc);
+      argv = my_values;
+      flag = 0;
+     
+      }
+      
+    }
+    if (check_the_argument(argc, argv, flag))
     {
         write(1, "Error\n", 6);
         //printf("%d\n", check_the_argument(argc, argv));
         return(1);
     }
 
-    stack_a = insert_into_stack(argc, argv);
+    stack_a = insert_into_stack(argc, argv, flag);
+    // listprint(stack_a);
     stack_a = sort_and_index(stack_a);
     stack_a = make_base(stack_a);
     //printf("\nstack_is_sorted: %d", the_stack_is_sorted(stack_a));

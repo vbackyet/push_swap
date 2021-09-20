@@ -1,6 +1,6 @@
 #include "push_swap.h"
 #include "stdio.h"
-
+# include	"get_next_line1/get_next_line.h"
 // int     ft_strcmp(char *s1, char *s2)
 // {
 //     int i;
@@ -16,7 +16,15 @@
 //     }
 //     return (0);
 // }
-
+int			ft_strlen(char *str)
+{
+	int len;
+ 
+	len = 0;
+	while (*str++ != '\0')
+		++len;
+	return (len);
+}
 
 void sa(t_stack **stack_a)
 {
@@ -47,7 +55,7 @@ void ss(t_stack **stack_a, t_stack **stack_b)
 
 void pa(t_stack **stack_a, t_stack **stack_b)
 {
-  int len;
+  // int len;
   int len2;
   t_stack *tmp;
 
@@ -88,7 +96,7 @@ void ra(t_stack **stack_a)
 
   len = detect_len_of_stack(*stack_a);
   if (len < 2)
-	return;
+	  return;
   head = (*stack_a);
   (*stack_a)  = (*stack_a)-> next;
   (*stack_a)-> prev = 0;
@@ -105,22 +113,28 @@ void rra(t_stack **stack_a)
   int len;
 
   len = detect_len_of_stack(*stack_a);
+  // printf("((%d))\n", len);
 	if (len < 2)
-	return;
+	  return;
+
   tail = find_on_index(*stack_a,len -1);
   find_on_index(*stack_a,len -2) -> next = 0;
   tail -> prev = 0;
   tail -> next = *stack_a;
   *stack_a = tail;
+
   // listprint(*stack_a);
   // find_on_index(*stack_a,len -1) -> next = head;
   *stack_a = reset_index(*stack_a);
+      // listprint(*stack_a);
+  // printf("HERE DONE\n");
 }
 
 
 
-void perform_command(t_stack **stack_a,t_stack **stack_b, char *command)
+void perform_command(t_stack **stack_a,t_stack **stack_b, char *command, int flag)
 {
+ 
 
   if (ft_strcmp(command, "ra") == 0)
     ra(stack_a);
@@ -143,6 +157,7 @@ void perform_command(t_stack **stack_a,t_stack **stack_b, char *command)
     rra(stack_b);
   if (ft_strcmp(command, "rrr") == 0)
   {
+     
     rra(stack_a);
     rra(stack_b);
   }
@@ -152,7 +167,11 @@ void perform_command(t_stack **stack_a,t_stack **stack_b, char *command)
     pa(stack_a, stack_b);}
   if (ft_strcmp(command, "pa") == 0)
     pa(stack_b, stack_a);
-  printf("%s\n", command);
+  if (flag)
+  {
+    write(1,command, ft_strlen(command));
+    write(1,"\n", 1);
+  }
 }
 // sa :swap a- swap the first 2 elements at the top of stack a. Do nothing if thereis only one or no elements).
 // sb :swap b- swap the first 2 elements at the top of stackb. Do nothing if thereis only one or no elements).

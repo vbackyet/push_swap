@@ -7,8 +7,11 @@
 int is_not_digit(char *my_arg)
 {
   int i =0;
+  if (!(ft_strcmp(my_arg,"")))
+    return 1;
   while (my_arg[i])
   {
+    // printf("[%c]\n", my_arg[i]);
     if ((my_arg[i] < '0' || my_arg[i] > '9') && (my_arg[i] != '-'))
       return(1);
     i++;
@@ -106,13 +109,15 @@ signed long long int		ft_atoi(const char *str)
 
 
 
-int check_the_argument(int argc, char **argv)
+int check_the_argument(int argc, char **argv, int flag)
 {
     //Проверка аргументов
     //some arguments aren’t integers, some arguments arebigger than an integer, and/or there are duplicates.
-  int i = argc - 1;
+  int i = argc - flag ;
+
   while (i > 0)
   {
+
     if (is_not_digit(argv[i]))
       return(1);
     if (is_duplicate(argc, argv[i], argv, i))
@@ -122,6 +127,7 @@ int check_the_argument(int argc, char **argv)
       return(3);
     i--;
   }
+
   return(0);
 }
 
@@ -169,10 +175,10 @@ int find_maximum(t_stack *stack, int the_index,int maximum)
 
 int find_maximum_value(t_stack *stack)
 {
-	t_stack *begin;
-	t_stack *markable;
+	// t_stack *begin;
+	// t_stack *markable;
 
-	begin = stack;
+	// begin = stack;
   int maximum = stack->num;
 	while (stack->next != NULL) 
 	{
@@ -211,10 +217,12 @@ int find_minimum(t_stack *stack)
 t_stack *sort_and_index(t_stack *stack)
 {
 	int len;
-	int max_num;
+	// int max_num;
 	int value;
 
-	max_num = stack->num;
+  value = 0;
+  value++;
+	// max_num = stack->num;
 	len = detect_len_of_stack(stack);
 	// printf("%d <---------",len);
 	while (len != 0)
@@ -263,7 +271,7 @@ void addelem(t_stack *stack, int number, int pos)
 
 
 
-t_stack *insert_into_stack(int argc, char **argv)
+t_stack *insert_into_stack(int argc, char **argv, int flag)
 {
     t_stack         *stack;
     t_stack         *first_el_of_stack;
@@ -272,15 +280,16 @@ t_stack *insert_into_stack(int argc, char **argv)
 
     pos_index = 0;
     // printf("%d <- сколько аргументов\n",argc);
+    // printf("%s <- какой аргумент\n",argv[0]);
     stack = (t_stack *)malloc(sizeof(t_stack));
 	  stack->chunk = 0;
-    stack->num = atoi(argv[1]);
+    stack->num = atoi(argv[flag]);
     stack->pos = pos_index;
-	stack->index = -1;
+	  stack->index = -1;
     stack->next = NULL; // указатель на следующий узел
     stack->prev = NULL; // указатель на предыдущий узел
     // printf("%d <- сколько аргументов\n",argc);
-    i = 2;
+    i = flag +1;
     // printf('%d quant\n',argc);
     first_el_of_stack = stack;
     while (argc > i)
@@ -305,7 +314,7 @@ void listprint(t_stack *lst)
   {
     while (p != NULL) 
     {
-      printf("{ %d | %d}",p->num, p->pos); // вывод значения элемента p
+      printf("{ %d | %d  | %d| %d}",p->num, p->pos, p->base, p->index); // вывод значения элемента p
       p = p->next; // переход к следующему узлу
     }  // условие окончания обхода
   }
@@ -318,8 +327,11 @@ int detect_len_of_stack(t_stack *stack)
   int i;
 
   i = 0;
+
+
   if (stack == NULL)
-    return 0;
+  {
+    return 0;}
   while (stack-> next != NULL)
   {
     i++;
@@ -417,7 +429,7 @@ t_stack *sort_little_stack(t_stack *stack_a,t_stack *stack_b, int len_of_the_sta
   {
     if (((find_on_index(stack_a, 1))->num) < ((find_on_index(stack_a, 0))->num))
     {
-      perform_command(&stack_a, &stack_b, "ra");
+      perform_command(&stack_a, &stack_b, "ra", 1);
       stack_a = reset_index(stack_a);
       counter_of_operations++;
     }
@@ -426,11 +438,11 @@ t_stack *sort_little_stack(t_stack *stack_a,t_stack *stack_b, int len_of_the_sta
   {
     
     if (((find_on_index(stack_a, 0))->num) == max)
-      perform_command(&stack_a, &stack_b, "ra");
+      perform_command(&stack_a, &stack_b, "ra", 1);
     if (((find_on_index(stack_a, 1))->num) == max)
-      perform_command(&stack_a, &stack_b, "rra");
+      perform_command(&stack_a, &stack_b, "rra", 1);
     if (((find_on_index(stack_a, 0))->num) > ((find_on_index(stack_a, 1))->num))
-      perform_command(&stack_a, &stack_b, "sa");
+      perform_command(&stack_a, &stack_b, "sa", 1);
   }
   if (len_of_the_stack == 4 || len_of_the_stack == 5)
   {
@@ -438,20 +450,20 @@ t_stack *sort_little_stack(t_stack *stack_a,t_stack *stack_b, int len_of_the_sta
     while (detect_len_of_stack(stack_b) < 2)
     {
 		if (stack_a->num == max || stack_a->num == min)
-			perform_command(&stack_a, &stack_b, "pb");
+			perform_command(&stack_a, &stack_b, "pb", 1);
 		else
-			perform_command(&stack_a, &stack_b, "ra");
+			perform_command(&stack_a, &stack_b, "ra", 1);
 	  }
 
     stack_a = sort_little_stack(stack_a, stack_b, len_of_the_stack - 2);
-    perform_command(&stack_a, &stack_b, "pa");
-    perform_command(&stack_a, &stack_b, "pa");
+    perform_command(&stack_a, &stack_b, "pa", 1);
+    perform_command(&stack_a, &stack_b, "pa", 1);
     if (stack_a->num == find_maximum_value(stack_a))
-      perform_command(&stack_a, &stack_b, "ra");
+      perform_command(&stack_a, &stack_b, "ra", 1);
     else
     {
-      perform_command(&stack_a, &stack_b, "sa");
-      perform_command(&stack_a, &stack_b, "ra");
+      perform_command(&stack_a, &stack_b, "sa", 1);
+      perform_command(&stack_a, &stack_b, "ra", 1);
     }
 
   }
@@ -501,13 +513,13 @@ t_stack *sort_big_stack(t_stack *stack_a,t_stack *stack_b)
         
         {
 
-        perform_command(&stack_a, &stack_b, "pb");
+        perform_command(&stack_a, &stack_b, "pb", 1);
         counter_of_operations++;
 
         }
       else
       {
-        perform_command(&stack_a, &stack_b, "ra");
+        perform_command(&stack_a, &stack_b, "ra", 1);
         counter_of_operations++;
        
       }
@@ -516,7 +528,7 @@ t_stack *sort_big_stack(t_stack *stack_a,t_stack *stack_b)
     }
     while(stack_b!= NULL)
         { 
-        perform_command(&stack_a, &stack_b, "pa");
+        perform_command(&stack_a, &stack_b, "pa", 1);
         //printf("\nafter\nb:");
         counter_of_operations++;
 

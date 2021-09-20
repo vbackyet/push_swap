@@ -22,10 +22,10 @@ char	*check_remainer(char *remain, char **line)
 void	str_join_with_free(char **line, char *l, int flag, int flag2)
 {
 	char	*tmp;
-	int		i;
+	// int		i;
 	int		temp;
 
-	i = 0;
+	// i = 0;
 	if (flag2)
 	{
 		temp = ft_strstr(l, "\n");
