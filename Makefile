@@ -9,7 +9,12 @@ PUSH_SWAP_SRC = push_swap.c\
 				utils.c\
 				get_next_line1/get_next_line.c\
 				get_next_line1/get_next_line_utils.c\
-
+				instructions.c\
+				prosto_tak.c\
+				ft_split.c\
+				algor_funct.c\
+				algor_funct2.c\
+				algor_funct3.c\
 
 
 CHECKER_SRC = 	push_swap.c\
@@ -17,6 +22,12 @@ CHECKER_SRC = 	push_swap.c\
 				utils.c\
 				get_next_line1/get_next_line.c\
 				get_next_line1/get_next_line_utils.c\
+				instructions.c\
+				prosto_tak.c\
+				ft_split.c\
+				algor_funct.c\
+				algor_funct2.c\
+				algor_funct3.c\
 
 
 all : $(PUSH_SWAP) $(CHECKER)
