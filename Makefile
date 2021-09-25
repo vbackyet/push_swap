@@ -42,10 +42,6 @@ fclean: clean
 		$(RM) $(PUSH_SWAP)
 		$(RM) $(CHECKER)
 
-# .c.o:
-# 		$(CC) $(CFLAGS)  -c $< -o $@
-
-
 re: 
 	fclean
 	all
