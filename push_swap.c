@@ -3,11 +3,10 @@
 static int	ft_itoa_base_sneaky(int value, int base, int flag)
 {
 	char		*ref;
-	static int	itog;
+	static int	itog = 0;
 	int			ia;
 
 	ref = "0123456789ABCDEF";
-	itog = 0;
 	if (flag)
 	{
 		itog = 0;

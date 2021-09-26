@@ -40,7 +40,7 @@ int	is_duplicate(int argc, char *el, char **spisok, int el_of_my_ind)
 	i = argc - 1;
 	while (i > el_of_my_ind)
 	{
-		if (!(ft_strcmp(spisok[i], el)))
+		if (ft_atoi(spisok[i]) == ft_atoi(el))
 			return (1);
 		i--;
 	}

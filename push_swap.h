@@ -2,7 +2,7 @@
 # define PUSH_SWAP_H
 
 # include	"get_next_line1/get_next_line.h"
-typedef struct	s_stack
+typedef struct s_stack
 {
 	int				num;
 	int				pos;

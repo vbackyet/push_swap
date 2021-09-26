@@ -24,7 +24,7 @@ void	perform_the_checker(t_stack *stack_a, t_stack *stack_b)
 	while (ret > 0)
 	{
 		line = 0;
-		ret = get_next_line(1, &line);
+		ret = get_next_line(0, &line);
 		if (check_the_argument_valid(line))
 		{
 			free(line);
